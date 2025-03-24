@@ -3,8 +3,12 @@ import { simplifiedProduct } from "../interface";
 import { client } from "../lib/sanity";
 import Image from 'next/image';
 
-interface PageProps {
-  params: { category: string };
+interface CategoryParams {
+  category: string;
+}
+
+interface CategoryPageProps {
+  params: CategoryParams;
 }
 
 async function getData(category: string) {
@@ -21,7 +25,7 @@ async function getData(category: string) {
   return data;
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const data: simplifiedProduct[] = await getData(params.category);
 
   return (
@@ -65,4 +69,11 @@ export default async function CategoryPage({ params }: PageProps) {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams(): Promise<CategoryParams[]> {
+  // Example categories; adjusted based on my actual categories from Sanity as my database.
+  const categories = ["painting", "drawing", "sculpture"];
+
+  return categories.map((category) => ({ category }));
 }
