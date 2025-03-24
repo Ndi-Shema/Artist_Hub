@@ -20,12 +20,12 @@
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "next-sanity": "^9.8.59",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "stripe": "^17.6.0",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
-    "use-shopping-cart": "^3.2.0"
+    "use-shopping-cart": "^3.2.0-alpha.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
