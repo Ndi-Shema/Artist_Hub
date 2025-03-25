@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"; // ✅ Fix: use Next.js Link
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,7 +30,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#f8f8f8] to-[#eaeaea] relative overflow-hidden">
-      {/* Some subtle lines or shapes in the background: */}
       <div
         className="absolute inset-0 bg-no-repeat bg-center bg-cover opacity-10"
         style={{
@@ -68,9 +68,9 @@ export default function LoginPage() {
               <input type="checkbox" id="remember" className="mr-1" />
               <label htmlFor="remember">Remember me</label>
             </div>
-            <a href="#" className="hover:underline">
+            <Link href="/forgot-password" className="hover:underline">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -83,9 +83,9 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Don&apos;t have an account?{" "}
-          <a href="/signup" className="text-primary hover:underline">
+          <Link href="/signup" className="text-primary hover:underline">
             Register
-          </a>
+          </Link>
         </p>
       </div>
     </div>
