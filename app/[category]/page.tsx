@@ -4,7 +4,7 @@ import { client } from "../lib/sanity";
 import Image from 'next/image';
 
 interface CategoryPageProps {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }
 
 async function getData(category: string) {
@@ -22,13 +22,14 @@ async function getData(category: string) {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const data: simplifiedProduct[] = await getData(params.category);
+  const { category } = await params;  // Important: await params as Next.js expects a Promise here
+  const data: simplifiedProduct[] = await getData(category);
 
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="flex justify-between items-center">
-          <h2>Our Art pieces for {params.category}</h2>
+          <h2>Our Art pieces for {category}</h2>
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
