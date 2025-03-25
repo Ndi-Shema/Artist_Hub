@@ -1,20 +1,19 @@
+// app/api/user/profile/route.ts
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { client } from "@/app/lib/sanity";
 
+// PATCH: Update user profile
 export async function PATCH(req: Request) {
   try {
-    // 1) Validate user is authenticated
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // 2) Parse the request body
     const { name, profileImageId } = await req.json();
 
-    // 3) Find the user's doc in Sanity by email
     const userDoc = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }
@@ -23,18 +22,15 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // 4) Build patch data
-    const patchData: any = { name: name ?? "" };
+    const patchData: Record<string, unknown> = { name: name ?? "" };
 
-    // If we do have a new assetId from the upload route
     if (profileImageId) {
       patchData["profileImage"] = {
         _type: "image",
-        asset: { _ref: profileImageId },
+        asset: { _type: "reference", _ref: profileImageId },
       };
     }
 
-    // 5) Patch the user doc in Sanity
     await client.patch(userDoc._id).set(patchData).commit();
 
     return NextResponse.json({ message: "Profile updated" });
@@ -44,9 +40,7 @@ export async function PATCH(req: Request) {
   }
 }
 
-/**
- * (Optional) DELETE route to remove user doc
- */
+// DELETE: Remove user document
 export async function DELETE() {
   try {
     const session = await getServerSession(authOptions);
@@ -54,7 +48,6 @@ export async function DELETE() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Find doc
     const userDoc = await client.fetch(
       `*[_type == "user" && email == $email][0]`,
       { email: session.user.email }

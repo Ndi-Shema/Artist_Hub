@@ -9,19 +9,16 @@ export default function ProfilePage() {
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(""); // read-only for display
-  const [imageUrl, setImageUrl] = useState(""); // local preview
+  const [email, setEmail] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [message, setMessage] = useState("");
 
-  // Load session data once we have a user
   useEffect(() => {
     if (session?.user) {
       setName(session.user.name ?? "");
       setEmail(session.user.email ?? "");
-      // If you want to load existing user image from server, you can fetch it here:
-      // setImageUrl(existingUser.profileImage ? existingUser.profileImage : "")
     }
   }, [session]);
 
@@ -34,7 +31,6 @@ export default function ProfilePage() {
     return null;
   }
 
-  // ---------- Handle user image selection ----------
   function handleFileChange() {
     if (fileInputRef.current?.files?.[0]) {
       const file = fileInputRef.current.files[0];
@@ -42,12 +38,10 @@ export default function ProfilePage() {
     }
   }
 
-  // ---------- Save changes to name/profile image ----------
   async function handleSave() {
     try {
       setMessage("");
 
-      // 1) Upload image if selected
       let uploadedImageId = null;
       if (fileInputRef.current?.files?.[0]) {
         const file = fileInputRef.current.files[0];
@@ -67,7 +61,6 @@ export default function ProfilePage() {
         uploadedImageId = data.assetId;
       }
 
-      // 2) Patch user doc with new name + profileImage
       const updateRes = await fetch("/api/user/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -90,7 +83,6 @@ export default function ProfilePage() {
     }
   }
 
-  // ---------- Delete the entire user account ----------
   async function handleDelete() {
     try {
       setMessage("");
@@ -104,9 +96,7 @@ export default function ProfilePage() {
         return;
       }
 
-      // Optionally signOut or redirect
       setMessage("Account deleted. Goodbye!");
-      // signOut() or...
       setTimeout(() => {
         router.push("/");
       }, 2000);
@@ -117,24 +107,19 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-[#f8f8f8] to-[#eaeaea] relative p-4">
-      {/* Subtle background pattern */}
+    <div className="min-h-screen flex items-center justify-center bg-white relative p-4">
       <div
-        className="absolute inset-0 bg-no-repeat bg-center bg-cover opacity-10"
-        style={{
-          backgroundImage:
-            'url("https://www.transparenttextures.com/patterns/asfalt-dark.png")',
-        }}
+        className="absolute inset-0 bg-[radial-gradient(#f0f0f0,#ccc)] opacity-30"
       />
 
       <div className="relative z-10 w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">My Profile</h1>
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">👤 My Profile</h1>
 
         {message && <p className="text-center mb-4 text-green-600 font-medium">{message}</p>}
 
-        <div className="space-y-4">
+        <div className="space-y-4 text-gray-800">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
+            <label className="block text-sm font-semibold mb-1">Display Name</label>
             <input
               type="text"
               className="w-full rounded border px-3 py-2 focus:outline-none"
@@ -143,33 +128,24 @@ export default function ProfilePage() {
             />
           </div>
 
-          {/* Show read-only email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-semibold mb-1">Email</label>
             <input
               type="text"
-              className="w-full rounded border px-3 py-2 focus:outline-none bg-gray-100"
+              className="w-full rounded border px-3 py-2 bg-gray-100"
               value={email}
               readOnly
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Profile Picture</label>
+            <label className="block text-sm font-semibold mb-1">Profile Picture</label>
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
                 {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt="Preview"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
                 ) : (
-                  <img
-                    src="/default-user.png"
-                    alt="Default"
-                    className="h-full w-full object-cover"
-                  />
+                  <img src="/default-user.png" alt="Default" className="h-full w-full object-cover" />
                 )}
               </div>
               <input
@@ -182,7 +158,6 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Save & Delete Buttons */}
           <div className="flex items-center justify-between mt-6">
             <button
               onClick={handleSave}
