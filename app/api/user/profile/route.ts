@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/lib/authOptions";import { client } from "@/app/lib/sanity";
+import { authOptions } from "@/app/lib/authOptions";
+import { client } from "@/app/lib/sanity";
 
 export async function PATCH(req: Request) {
   try {
-    const session = await getServerSession(authOptions); // ✅ Safe import now
+    const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -20,9 +21,20 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const patchData: any = { name: name ?? "" };
+    const patchData: {
+      name?: string;
+      profileImage?: {
+        _type: "image";
+        asset: { _ref: string };
+      };
+    } = {};
+
+    if (name) {
+      patchData.name = name;
+    }
+
     if (profileImageId) {
-      patchData["profileImage"] = {
+      patchData.profileImage = {
         _type: "image",
         asset: { _ref: profileImageId },
       };
