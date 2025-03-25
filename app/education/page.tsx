@@ -35,6 +35,7 @@ export default function EducationPage() {
           createdAt
         }`;
         const data = await client.fetch(query);
+        console.log("Fetched articles:", data);
         setArticles(data);
       } catch (error) {
         console.error("Error fetching articles:", error);
