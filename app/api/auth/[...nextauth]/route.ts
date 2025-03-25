@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-
 import { client } from "@/app/lib/sanity";
 
 export const authOptions: NextAuthOptions = {
@@ -19,18 +18,18 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        // 1) Fetch user doc from Sanity
         const userDoc = await client.fetch(
           `*[_type == "user" && email == $email][0]`,
           { email: credentials.email }
         );
-        if (!userDoc) return null; // no user found
+        if (!userDoc) return null;
 
-        // 2) Compare the password
-        const passwordMatch = await bcrypt.compare(credentials.password, userDoc.passwordHash);
-        if (!passwordMatch) return null; // invalid password
+        const passwordMatch = await bcrypt.compare(
+          credentials.password,
+          userDoc.passwordHash
+        );
+        if (!passwordMatch) return null;
 
-        // 3) Return user object for session
         return {
           id: userDoc._id,
           email: userDoc.email,
@@ -58,10 +57,11 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/login", // custom login page
+    signIn: "/login",
   },
 };
 
+// ✅ Don't export `authOptions` directly
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
