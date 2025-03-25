@@ -6,7 +6,7 @@ import { client } from "@/app/lib/sanity";
 
 interface Article {
   title: string;
-  content: any[]; // Explicit Portable Text blocks type
+  content: Array<Record<string, unknown>>; // explicitly fixed
   image?: { asset: { url: string } };
   externalLink?: string;
   createdAt?: string;
