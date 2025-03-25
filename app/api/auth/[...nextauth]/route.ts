@@ -1,10 +1,10 @@
-// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { client } from "@/app/lib/sanity";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
   },
@@ -24,12 +24,15 @@ const handler = NextAuth({
         );
         if (!userDoc) return null;
 
-        const passwordMatch = await bcrypt.compare(credentials.password, userDoc.passwordHash);
+        const passwordMatch = await bcrypt.compare(
+          credentials.password,
+          userDoc.passwordHash
+        );
         if (!passwordMatch) return null;
 
         return {
           id: userDoc._id,
-          email: userDoc.email ?? "",
+          email: userDoc.email,
           name: userDoc.name ?? "",
         };
       },
@@ -45,7 +48,7 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
@@ -56,6 +59,8 @@ const handler = NextAuth({
   pages: {
     signIn: "/login",
   },
-});
+};
 
+// ✅ Required exports for Next.js API routes
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
