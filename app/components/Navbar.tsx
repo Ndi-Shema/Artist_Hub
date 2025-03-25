@@ -11,7 +11,7 @@ const links = [
   { name: "Abstract", href: "/Abstract" },
   { name: "Culture", href: "/Culture" },
   { name: "Beautiful", href: "/Beautiful" },
-  { name: "Legal Articles", href: "/education", isButton: true },
+  { name: "education articles", href: "/education", isButton: true },
 ];
 
 export default function Navbar() {
