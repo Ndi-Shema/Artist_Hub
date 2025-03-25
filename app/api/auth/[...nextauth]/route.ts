@@ -1,11 +1,10 @@
+// app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { client } from "@/app/lib/sanity";
 
-// ✅ EXPORT THIS
-export const authOptions: NextAuthOptions = {
+const handler = NextAuth({
   session: {
     strategy: "jwt",
   },
@@ -23,19 +22,14 @@ export const authOptions: NextAuthOptions = {
           `*[_type == "user" && email == $email][0]`,
           { email: credentials.email }
         );
-
         if (!userDoc) return null;
 
-        const passwordMatch = await bcrypt.compare(
-          credentials.password,
-          userDoc.passwordHash
-        );
-
+        const passwordMatch = await bcrypt.compare(credentials.password, userDoc.passwordHash);
         if (!passwordMatch) return null;
 
         return {
           id: userDoc._id,
-          email: userDoc.email,
+          email: userDoc.email ?? "",
           name: userDoc.name ?? "",
         };
       },
@@ -62,8 +56,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
   },
-};
+});
 
-// ✅ NEXT AUTH HANDLER EXPORTS
-const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
