@@ -20,10 +20,10 @@ export default function ShoppingCartModal() {
 
   const [phoneNumber, setPhoneNumber] = useState<string>("");
 
-  const totalAmount = totalPrice > 0 ? totalPrice : 1;
+  const totalAmount = (totalPrice ?? 0) > 0 ? totalPrice! : 1;
 
   const config = {
-    public_key: process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY,
+    public_key: process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY || "",
     tx_ref: "ARTSHOP-" + Date.now(),
     amount: totalAmount,
     currency: "RWF",
