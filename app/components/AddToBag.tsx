@@ -9,7 +9,7 @@ export interface ProductCart {
   description: string;
   price: number;
   currency: string;
-  image: unknown;
+  image: string;
 }
 
 export function AddToBag({

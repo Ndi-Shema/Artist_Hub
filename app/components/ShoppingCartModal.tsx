@@ -7,6 +7,12 @@ import { useShoppingCart } from "use-shopping-cart";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { useCallback, useState } from "react";
 
+interface FlutterWaveResponse {
+  status: string;
+  transaction_id: number; // <-- explicitly correct (number)
+  tx_ref: string;
+}
+
 export default function ShoppingCartModal() {
   const {
     cartCount,
@@ -30,7 +36,7 @@ export default function ShoppingCartModal() {
     payment_options: "card, mobilemoneyrwanda",
     customer: {
       email: "fredshema24@gmail.com",
-      phone_number: phoneNumber || "",
+      phone_number: phoneNumber,
       name: "Shema Fred",
     },
     customizations: {
@@ -38,7 +44,7 @@ export default function ShoppingCartModal() {
       description: "Payment for items in cart",
       logo: "https://your-logo-url.com/logo.png",
     },
-    callback: (response: unknown) => {
+    callback: (response: FlutterWaveResponse) => {
       console.log("Payment Response:", response);
       closePaymentModal();
       alert("Payment Successful!");
@@ -54,14 +60,14 @@ export default function ShoppingCartModal() {
       return;
     }
     handleFlutterwavePayment({
-      callback: (response: unknown) => {
+      callback: (response: FlutterWaveResponse) => {
         console.log("Payment Response:", response);
         closePaymentModal();
         alert("Payment Successful!");
       },
       onClose: () => alert("Payment window closed"),
     });
-  }, [handleFlutterwavePayment]); // removed 'config' from dependency array
+  }, [handleFlutterwavePayment]);
 
   return (
     <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
@@ -78,39 +84,26 @@ export default function ShoppingCartModal() {
               ) : (
                 Object.values(cartDetails ?? {}).map((entry, index) => (
                   <li key={`${entry.id}-${index}`} className="flex py-6">
-                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border-gray-200">
+                    <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md">
                       <Image src={entry.image as string} alt={entry.name} width={100} height={100} />
                     </div>
                     <div className="ml-4 flex flex-1 flex-col">
-                      <div>
-                        <div className="flex justify-between text-base font-medium text-gray-900">
-                          <h3>{entry.name}</h3>
-                          <p className="ml-4">${entry.price}</p>
-                        </div>
-                        <p className="mt-1 text-sm text-gray-500 line-clamp-2">{entry.description}</p>
+                      <div className="flex justify-between text-base font-medium text-gray-900">
+                        <h3>{entry.name}</h3>
+                        <p className="ml-4">${entry.price}</p>
                       </div>
+                      <p className="mt-1 text-sm text-gray-500 line-clamp-2">{entry.description}</p>
                       <div className="flex flex-1 items-end justify-between text-sm">
                         <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => setItemQuantity(entry.id, entry.quantity - 1)}
-                            disabled={entry.quantity === 1}
-                            className="px-2 py-1 bg-gray-200 rounded"
-                          >
+                          <button onClick={() => setItemQuantity(entry.id, entry.quantity - 1)} disabled={entry.quantity === 1} className="px-2 py-1 bg-gray-200 rounded">
                             ➖
                           </button>
                           <p className="text-gray-500">{entry.quantity}</p>
-                          <button
-                            onClick={() => setItemQuantity(entry.id, entry.quantity + 1)}
-                            className="px-2 py-1 bg-gray-200 rounded"
-                          >
+                          <button onClick={() => setItemQuantity(entry.id, entry.quantity + 1)} className="px-2 py-1 bg-gray-200 rounded">
                             ➕
                           </button>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => removeItem(entry.id)}
-                          className="font-medium text-red-500 hover:text-red-700"
-                        >
+                        <button onClick={() => removeItem(entry.id)} className="font-medium text-red-500 hover:text-red-700">
                           Remove
                         </button>
                       </div>
@@ -122,37 +115,27 @@ export default function ShoppingCartModal() {
           </div>
 
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-            <div className="mb-4">
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                Phone Number (for Mobile Money):
-              </label>
-              <input
-                type="tel"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="w-full border rounded px-2 py-1 text-gray-700"
-                placeholder="+250 788 123 456"
-              />
-            </div>
+            <input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              placeholder="+250 788 123 456"
+              className="w-full border rounded px-2 py-1 text-gray-700 mb-4"
+            />
             <div className="flex justify-between text-base font-medium text-gray-900">
               <p>Subtotal:</p>
               <p>${totalPrice}</p>
             </div>
-            <p className="mt-0.5 text-sm text-gray-500">
-              Delivery and taxes are calculated at checkout.
-            </p>
+            <p className="mt-0.5 text-sm text-gray-500">Delivery and taxes are calculated at checkout.</p>
             <div className="mt-6">
               <Button className="w-full" onClick={handlePayment} disabled={cartCount === 0 || !totalPrice}>
                 Checkout with Flutterwave
               </Button>
             </div>
-            <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-              <p>
-                OR{" "}
-                <button onClick={() => handleCartClick()} className="font-medium text-primary hover:text-primary/80">
-                  Continue Shopping
-                </button>
-              </p>
+            <div className="mt-6 flex justify-center text-sm text-gray-500">
+              <button onClick={() => handleCartClick()} className="font-medium text-primary hover:text-primary/80">
+                Continue Shopping
+              </button>
             </div>
           </div>
         </div>

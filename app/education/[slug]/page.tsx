@@ -6,14 +6,14 @@ import { client } from "@/app/lib/sanity";
 
 interface Article {
   title: string;
-  content: unknown[];
+  content: any[]; // Explicit Portable Text blocks type
   image?: { asset: { url: string } };
   externalLink?: string;
   createdAt?: string;
 }
 
 export default function ArticlePage() {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<Article | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -23,7 +23,7 @@ export default function ArticlePage() {
       setLoading(true);
       try {
         const query = `*[_type == "article" && slug.current == $slug][0] {title, content, image{asset->{url}}, externalLink, createdAt}`;
-        const data = await client.fetch(query, { slug });
+        const data: Article = await client.fetch(query, { slug });
         setArticle(data);
       } catch (error) {
         console.error("Error fetching article:", error);
@@ -40,10 +40,9 @@ export default function ArticlePage() {
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
       <div className="prose prose-lg">
-        {article.content &&
-          article.content.map((block, idx) => (
-            <p key={idx}>{JSON.stringify(block)}</p>
-          ))}
+        {article.content.map((block, idx) => (
+          <p key={idx}>{JSON.stringify(block)}</p>
+        ))}
       </div>
     </div>
   );
