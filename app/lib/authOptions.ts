@@ -1,12 +1,11 @@
+// lib/authOptions.ts
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { client } from "@/app/lib/sanity";
 
 export const authOptions: NextAuthOptions = {
-  session: {
-    strategy: "jwt",
-  },
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -16,18 +15,14 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-
         const userDoc = await client.fetch(
           `*[_type == "user" && email == $email][0]`,
           { email: credentials.email }
         );
         if (!userDoc) return null;
 
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          userDoc.passwordHash
-        );
-        if (!isValid) return null;
+        const passwordMatch = await bcrypt.compare(credentials.password, userDoc.passwordHash);
+        if (!passwordMatch) return null;
 
         return {
           id: userDoc._id,
@@ -41,8 +36,8 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email!;
-        token.name = user.name!;
+        token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
