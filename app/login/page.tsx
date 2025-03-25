@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // ✅ Fix: use Next.js Link
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -68,9 +68,9 @@ export default function LoginPage() {
               <input type="checkbox" id="remember" className="mr-1" />
               <label htmlFor="remember">Remember me</label>
             </div>
-            <Link href="/forgot-password" className="hover:underline">
+            <a href="#" className="hover:underline">
               Forgot password?
-            </Link>
+            </a>
           </div>
 
           <button

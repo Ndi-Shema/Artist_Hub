@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -12,7 +13,6 @@ export default function ProfilePage() {
   const [email, setEmail] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -108,9 +108,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white relative p-4">
-      <div
-        className="absolute inset-0 bg-[radial-gradient(#f0f0f0,#ccc)] opacity-30"
-      />
+      <div className="absolute inset-0 bg-[radial-gradient(#f0f0f0,#ccc)] opacity-30" />
 
       <div className="relative z-10 w-full max-w-md bg-white rounded-lg shadow-lg p-6">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">👤 My Profile</h1>
@@ -141,12 +139,13 @@ export default function ProfilePage() {
           <div>
             <label className="block text-sm font-semibold mb-1">Profile Picture</label>
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-gray-200 rounded-full overflow-hidden">
-                {imageUrl ? (
-                  <img src={imageUrl} alt="Preview" className="h-full w-full object-cover" />
-                ) : (
-                  <img src="/default-user.png" alt="Default" className="h-full w-full object-cover" />
-                )}
+              <div className="w-16 h-16 rounded-full overflow-hidden relative">
+                <Image
+                  src={imageUrl || "/default-user.png"}
+                  alt="Profile"
+                  fill
+                  className="object-cover rounded-full"
+                />
               </div>
               <input
                 type="file"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -90,9 +91,9 @@ export default function SignupPage() {
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Already have an account?{" "}
-          <a href="/login" className="text-primary hover:underline">
+          <Link href="/login" className="text-primary hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>
