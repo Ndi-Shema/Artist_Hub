@@ -107,7 +107,7 @@ export default function EducationPage() {
                     ➡️ Read More
                   </Link>
 
-                  {/* External Link */}
+                  {/* External Link that users can navigate for more info */}
                   {article.externalLink && (
                     <a
                       href={article.externalLink}
