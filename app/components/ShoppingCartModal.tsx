@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import Image from "next/image";
 import { useShoppingCart } from "use-shopping-cart";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -32,7 +32,7 @@ export default function ShoppingCartModal() {
 
   const totalAmount = (totalPrice ?? 0) > 0 ? totalPrice! : 1;
 
-  const config = {
+  const config = useMemo(() => ({
     public_key: process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY || "",
     tx_ref: "ARTSHOP-" + Date.now(),
     amount: totalAmount,
@@ -53,7 +53,6 @@ export default function ShoppingCartModal() {
       closePaymentModal();
       alert("Payment Successful!");
 
-      // Send confirmation email
       try {
         await fetch("/api/email/send", {
           method: "POST",
@@ -71,7 +70,7 @@ export default function ShoppingCartModal() {
       }
     },
     onclose: () => alert("Payment window closed"),
-  };
+  }), [session, phoneNumber, cartDetails, totalPrice, totalAmount]);
 
   const handleFlutterwavePayment = useFlutterwave(config);
 

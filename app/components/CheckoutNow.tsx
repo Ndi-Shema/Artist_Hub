@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function CheckoutNow() {
-  const { data: session, status } = useSession();
+  const { data: session} = useSession();
   const router = useRouter();
 
   function handleCheckout() {
