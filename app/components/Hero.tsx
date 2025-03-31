@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { client, urlfor } from "../lib/sanity";
 import Link from "next/link";
-import SubmissionForm from "@/app/components/SubmissionForm"; // ✅ Import the form component
 
 async function getData() {
   const query = `*[_type == 'heroImage'][0]`;
