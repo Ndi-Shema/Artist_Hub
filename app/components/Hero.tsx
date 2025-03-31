@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { client, urlfor } from "../lib/sanity";
 import Link from "next/link";
+import SubmissionForm from "@/app/components/SubmissionForm"; // ✅ Import the form component
 
 async function getData() {
   const query = `*[_type == 'heroImage'][0]`;
@@ -64,14 +65,26 @@ export default async function Home() {
             </Link>
 
             <Link
-              href="/Beautiful"
+              href="/Unique"
               className="flex w-1/3 items-center justify-center text-gray-500 transition duration-100 hover:bg-gray-100 active:bg-gray-200"
             >
-              Beautiful
+              Unique
             </Link>
           </div>
+
+          <div className="mt-6">
+            <Link
+              href="/submit"
+              className="inline-block bg-primary text-white px-6 py-2 rounded font-medium hover:bg-primary/80 transition"
+            >
+              Sell your Products with us
+            </Link>
+          </div>
+
         </div>
       </div>
+
+
     </section>
   );
 }
