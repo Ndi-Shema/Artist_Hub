@@ -6,10 +6,12 @@ import Image from "next/image";
 import { useShoppingCart } from "use-shopping-cart";
 import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 import { useCallback, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface FlutterWaveResponse {
   status: string;
-  transaction_id: number; // <-- explicitly correct (number)
+  transaction_id: number;
   tx_ref: string;
 }
 
@@ -25,6 +27,8 @@ export default function ShoppingCartModal() {
   } = useShoppingCart();
 
   const [phoneNumber, setPhoneNumber] = useState<string>("");
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const totalAmount = (totalPrice ?? 0) > 0 ? totalPrice! : 1;
 
@@ -35,19 +39,36 @@ export default function ShoppingCartModal() {
     currency: "RWF",
     payment_options: "card, mobilemoneyrwanda",
     customer: {
-      email: "fredshema24@gmail.com",
+      email: session?.user?.email || "",
       phone_number: phoneNumber,
-      name: "Shema Fred",
+      name: session?.user?.name || "Guest",
     },
     customizations: {
       title: "The Artist Hub Checkout",
       description: "Payment for items in cart",
       logo: "https://your-logo-url.com/logo.png",
     },
-    callback: (response: FlutterWaveResponse) => {
+    callback: async (response: FlutterWaveResponse) => {
       console.log("Payment Response:", response);
       closePaymentModal();
       alert("Payment Successful!");
+
+      // Send confirmation email
+      try {
+        await fetch("/api/email/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: session?.user?.name || "Valued Customer",
+            email: session?.user?.email,
+            phone: phoneNumber,
+            items: Object.values(cartDetails ?? {}),
+            total: totalPrice,
+          }),
+        });
+      } catch (error) {
+        console.error("Failed to send confirmation email:", error);
+      }
     },
     onclose: () => alert("Payment window closed"),
   };
@@ -55,19 +76,19 @@ export default function ShoppingCartModal() {
   const handleFlutterwavePayment = useFlutterwave(config);
 
   const handlePayment = useCallback(() => {
+    if (!session?.user) {
+      router.push("/login");
+      return;
+    }
     if (typeof handleFlutterwavePayment !== "function") {
       console.error("Flutterwave payment function is not initialized properly");
       return;
     }
     handleFlutterwavePayment({
-      callback: (response: FlutterWaveResponse) => {
-        console.log("Payment Response:", response);
-        closePaymentModal();
-        alert("Payment Successful!");
-      },
-      onClose: () => alert("Payment window closed"),
+      callback: config.callback,
+      onClose: config.onclose,
     });
-  }, [handleFlutterwavePayment]);
+  }, [handleFlutterwavePayment, session, router, config]);
 
   return (
     <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
