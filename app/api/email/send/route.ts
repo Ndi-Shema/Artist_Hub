@@ -1,15 +1,27 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+interface CartItem {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, items, total }: {
-        name: string;
-        email: string;
-        phone: string;
-        items: any[]; // or define item type
-        total: number;
-      } = await req.json();
+    const {
+      name,
+      email,
+      phone, // ✅ we now use this below
+      items,
+      total,
+    }: {
+      name: string;
+      email: string;
+      phone: string;
+      items: CartItem[];
+      total: number;
+    } = await req.json();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -19,9 +31,9 @@ export async function POST(req: Request) {
       },
     });
 
-    const itemsList = items.map((item: any) =>
-      `- ${item.name} (x${item.quantity}) - $${item.price}`
-    ).join("\n");
+    const itemsList = items
+      .map((item: CartItem) => `- ${item.name} (x${item.quantity}) - $${item.price}`)
+      .join("\n");
 
     const mailOptions = {
       from: `"ArtistHub" <${process.env.EMAIL_USER}>`,
@@ -38,12 +50,9 @@ ${itemsList}
 Total: $${total}
 
 📦 Your delivery is being processed.
+📞 We will contact you at ${phone} when your order is ready.
 
-    You will be contacted when your order is ready to be delivered.
-
-📞 Contact: delivery.artist@gmail.com
-
-📞 or Call this number in case you need more information. +250787591929 .
+For inquiries, email delivery.artist@gmail.com or call +250787591929.
 
 Thank you for supporting Rwandan art!
 
