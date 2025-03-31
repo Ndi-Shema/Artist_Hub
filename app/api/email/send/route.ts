@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const {
       name,
       email,
-      phone, // ✅ we now use this below
+      phone, 
       items,
       total,
     }: {
