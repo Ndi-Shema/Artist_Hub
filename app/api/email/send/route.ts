@@ -54,7 +54,7 @@ Total: $${total}
 
 For inquiries, email delivery.artist@gmail.com or call +250787591929.
 
-Thank you for supporting Rwandan art!
+Thank you for supporting the artistHub!
 
 – ArtistHub Team
       `.trim(),
