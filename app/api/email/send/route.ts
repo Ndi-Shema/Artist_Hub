@@ -24,12 +24,15 @@ export async function POST(req: Request) {
     } = await req.json();
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
 
     const itemsList = items
       .map((item: CartItem) => `- ${item.name} (x${item.quantity}) - $${item.price}`)
