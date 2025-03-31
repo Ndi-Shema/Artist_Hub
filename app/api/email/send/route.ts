@@ -69,7 +69,7 @@ Thank you for supporting the artistHub!
     console.error("Failed to send email:", error);
     return NextResponse.json({ error: "Email failed" }, { status: 500 });
   }
-}
+console.log("ENV EMAIL_USER:", process.env.EMAIL_USER);
+console.log("ENV EMAIL_PASS Present:", !!process.env.EMAIL_PASS);
 
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS Present:", !!process.env.EMAIL_PASS);
+}
