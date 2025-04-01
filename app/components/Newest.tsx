@@ -60,7 +60,7 @@ export default async function Newest() {
                         </p>
                     </div>
                     <p className="tex-sm font-medium text-gray-900">
-                      ${product.price}
+                      {product.price} RWF
                     </p>
                   </div>
               </div>

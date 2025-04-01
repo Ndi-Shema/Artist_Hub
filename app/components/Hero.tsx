@@ -13,15 +13,22 @@ export default async function Home() {
   return (
     <section className="mx-auto max-w-2xl px-4 sm:pb-6 lg:max-w-7xl lg:px-8">
       <div className="mb-8 flex flex-wrap justify-between md:mb-16">
-        <div className="mb-6 flex w-full flex-col justify-center sm:mb-12 lg:mb-0 lg:w-1/3 lg:pb-24 lg:pt-48">
-          <h1 className="mb-4 text-4xl font-bold text-black sm:text-5xl md:mb-8 md:text-6xl">
-            Style Meets Fantasy in Art.
-          </h1>
+      <div className="mb-6 flex w-full flex-col justify-center sm:mb-12 lg:mb-0 lg:w-1/3 lg:pb-24 lg:pt-48">
+  <h1 className="mb-4 text-4xl sm:text-5xl md:mb-8 md:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
+    <span className="relative inline-block">
+      <span className="bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
+        Style Meets Fantasy
+      </span>
+      <span className="block">in Art.</span>
+    </span>
+  </h1>
 
-          <p className="max-w-mid leading-relaxed text-gray-500 xl:text-lg">
-            Experience stunning art pieces curated to inspire, elevate creativity, and connect with the community through our SHOP.
-          </p>
-        </div>
+  <p className="max-w-md text-lg text-gray-600 font-light italic leading-relaxed tracking-wide">
+    ✦ Discover imaginative pieces curated to <span className="font-medium text-primary">elevate</span> your space,
+    awaken creativity, and strengthen community through art.
+  </p>
+</div>
+
 
         <div className="mb-12 flex w-full md:mb-16 lg:w-2/3">
           <div className="relative left-12 top-12 z-10 -ml-12 overflow-hidden rounded-lg bg-gray-100 shadow-lg md:left-16 md:top lg:ml-0">
@@ -71,14 +78,15 @@ export default async function Home() {
             </Link>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-2 ml-2">
             <Link
               href="/submit"
-              className="inline-block bg-primary text-white px-6 py-2 rounded font-medium hover:bg-primary/80 transition"
+              className="inline-flex h-12 items-center justify-center bg-primary text-white px-6 rounded-lg font-medium hover:bg-primary/80 transition"
             >
               Sell your Products with us
             </Link>
           </div>
+
 
         </div>
       </div>

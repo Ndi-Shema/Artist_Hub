@@ -110,7 +110,7 @@ export default function ShoppingCartModal() {
                     <div className="ml-4 flex flex-1 flex-col">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <h3>{entry.name}</h3>
-                        <p className="ml-4">${entry.price}</p>
+                        <p className="ml-4">{entry.price} RWF</p>
                       </div>
                       <p className="mt-1 text-sm text-gray-500 line-clamp-2">{entry.description}</p>
                       <div className="flex flex-1 items-end justify-between text-sm">
@@ -144,7 +144,7 @@ export default function ShoppingCartModal() {
             />
             <div className="flex justify-between text-base font-medium text-gray-900">
               <p>Subtotal:</p>
-              <p>${totalPrice}</p>
+              <p>{totalPrice} RWF</p>
             </div>
             <p className="mt-0.5 text-sm text-gray-500">Delivery and taxes are calculated at checkout.</p>
             <div className="mt-6">

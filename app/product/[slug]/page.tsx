@@ -56,10 +56,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="mb-4">
               <div className="flex items-end gap-2">
                 <span className="text-xl font-bold text-gray-800 md:text-2xl">
-                  ${data.price}
+                  {data.price} RWF
                 </span>
                 <span className="mb-0.5 text-red-500 line-through">
-                  ${data.price + 10}
+                  {data.price + 10} RWF
                 </span>
               </div>
 
