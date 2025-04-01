@@ -102,11 +102,6 @@ export default function EducationPage() {
                   <h2 className="text-xl font-semibold mb-2">{article.title}</h2>
                   <p className="text-gray-600 mb-3">{article.summary}</p>
 
-                  {/* Read More Link */}
-                  <Link href={`/education/${article.slug.current}`} className="block mt-2 text-primary hover:text-primary/80 hover:underline font-medium">
-                    ➡️ Read More
-                  </Link>
-
                   {/* External Link that users can navigate for more info */}
                   {article.externalLink && (
                     <a
