@@ -5,7 +5,7 @@ ArtistHub is a full-stack web platform designed to empower Rwandan artists by gi
 ## 🚀 Live Deployment
 
 > Deployed on **Vercel**
-> 🔗 https://the-artisthub.vercel.app *(if live)*
+> 🔗 https://the-artist-hub-shema.vercel.app/
 
 ## 📌 Features
 
@@ -37,8 +37,8 @@ ArtistHub is a full-stack web platform designed to empower Rwandan artists by gi
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Ndi-Shema/the_artist_hub.git
-cd the_artist_hub
+git clone https://github.com/Ndi-Shema/Artist_Hub.git
+cd artist_hub
 ```
 
 ### 2. Install Dependencies
@@ -128,10 +128,6 @@ Artists can visit the **Legal Articles** section to:
 - **Shema Fred** – Developer, Project Lead
 - **David [Supervisor]** – Capstone Supervisor
 - Mentors from African Leadership University
-
-## 📜 License
-
-This project is licensed under the MIT License.
 
 ## 📧 Contact
 
